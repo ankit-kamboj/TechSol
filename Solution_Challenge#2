@@ -1,0 +1,9 @@
+#  query the metadata of any compute engine in GCP and output should be in json format. I am sharing the solution on how we can do it in GCP to query metadata of any resource
+
+#Here, we can use gcloud command to query metadata of GCP compute instnce and get the ourpur in json format also using "--format" argument.
+
+#Command is :
+  # gcloud compute instances decribe <Instance_Name> --zone=<Zone_Name> --format=json > <File_name>.json
+   gcloud compute instances decribe app-server-01 --zone=us-east01 --format=json > metedata.json
+    
+#Instance name is - app-server01
