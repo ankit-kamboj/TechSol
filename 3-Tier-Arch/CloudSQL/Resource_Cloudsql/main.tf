@@ -7,7 +7,7 @@ resource "random_id" "suffix" {
 resource "google_sql_database_instance" "instance" {
   provider            = google-beta
   project             = var.project_id
-  name                = var.master_instance_name
+  name                = "$(var.name)-${random_id.siffix[0].hex}"
   database_version    = var.database_version
   region              = var.region
   encryption_key_name = var.encryption_key_name
@@ -17,15 +17,15 @@ resource "google_sql_database_instance" "instance" {
     tier              = var.tier
     availability_type = var.availability_type
     backup_configuration {
-	  binary_log_enabled = False
+	  binary_log_enabled         = False
 	  enabled 		     = True
-	  start-time 		 = var.backup_start_time
+	  start-time 		     = var.backup_start_time
 	}
 	
     ip_configuration {
-      ipv4-enabled    = var.public_ip
+	  ipv4-enabled    = var.public_ip
 	  require-ssl     = var.require_ssl
-	  private-network = "projects/${var.host_project_id}/global/networks/${var.vpc_name}"
+	  private-network = "projects/${var.project_id}/global/networks/${var.vpc_name}"
 	}
 
     disk_autoresize = var.disk_autoresize
