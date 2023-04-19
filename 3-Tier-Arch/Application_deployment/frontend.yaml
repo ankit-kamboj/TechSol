@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fe-service
+spec:
+  selector:
+    app: frontend
+    environment: dev
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - env:
+        - name: BACKEND_URL
+          value: "https://backend.com"
+        name: frontend
+        image: fe-webserver:latest
+        ports:
+        - containerPort: 80
+        securityContext:
+          runasUser: 1001
+          runasGroup: 1001
+          
