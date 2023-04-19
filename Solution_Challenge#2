@@ -1,4 +1,6 @@
-#  query the metadata of any compute engine in GCP and output should be in json format. I am sharing the solution on how we can do it in GCP to query metadata of any resource
+#  query the metadata of any compute engine in GCP and output should be in json format. 
+# I am sharing the solution on how we can do it in GCP to query metadata of any resource
+# one way of doing it is using gcloud command.
 
 #Here, we can use gcloud command to query metadata of GCP compute instnce and get the ourpur in json format also using "--format" argument.
 
@@ -7,3 +9,27 @@
    gcloud compute instances decribe app-server-01 --zone=us-east01 --format=json > metedata.json
     
 #Instance name is - app-server01
+
+
+=================
+another option which we can try is using below shell script..
+
+#!/bin/bash
+
+INSTANCE_NAME=<instance-name>
+ZONE=<instance-zone>
+
+# instance metadata in JSON format
+INSTANCE_METADATA=$(curl -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/?recursive=true&alt=json" -s)
+
+# Get instance zone
+ZONE=$(echo "$INSTANCE_METADATA" | jq -r '.zone' | cut -d/ -f4)
+
+# Get instance name
+INSTANCE_NAME=$(echo "$INSTANCE_METADATA" | jq -r '.name')
+
+# Get specific metadata value
+MY_CUSTOM_METADATA=$(echo "$INSTANCE_METADATA" | jq -r '.attributes."my-custom-metadata-key"')
+
+# Output metadata in JSON format
+echo "{\"instance_name\":\"$INSTANCE_NAME\",\"zone\":\"$ZONE\",\"my_custom_metadata\":\"$MY_CUSTOM_METADATA\"}"
