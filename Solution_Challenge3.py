@@ -21,5 +21,5 @@ def extract(njson, jkey, count, newstring):
    
     return newstring
 
-json_key={"x":{"y":{"z":{"a"}}}}
-traverse_nested_json(json_key, ['x','y'])
+njson={"x":{"y":{"z":{"a"}}}}
+traverse_nested_json(njson, ['x','y'])
