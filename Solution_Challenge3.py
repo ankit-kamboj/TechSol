@@ -20,3 +20,6 @@ def extract(njson, jkey, count, newstring):
             print ("You have reached the end of object")
    
     return newstring
+
+json_key={"x":{"y":{"z":{"a"}}}}
+traverse_nested_json(json_key, ['x','y'])
